@@ -1,41 +1,102 @@
-const $itemsContainer = document.querySelector("section#items")
-const $cart = document.querySelector("section#cart ul")
-let items = []
-let inCart = []
+const $songsContainer = document.querySelector("section#songs")
+const $usersContainer = document.querySelector("section#userSelection")
+const $likedSongs = document.querySelector("section#likedSongs ul")
+let songs = []
+let users = []
+let inLikedSongs = []
 
-loadItems()
+loadSongs()
 
-function loadItems() {
-    fetch("/items")
+function loadSongs() {
+    fetch("/songs")
         .then( response => response.json() )
         .then( response => {
         console.log(response)
-            createItemCards(response) 
+            createSongCards(response) 
         })
         .catch(err => console.error(err))
 }
 
-function createItemCards(_items) {
-    items = _items
-    const itemsHTML = _items.map(item => 
-        `<div class="item">
-            <h3>Name: ${item.name}</h3>            
-            <button onClick="addToCart(${item.itemid}, event)">Add to Cart</button>
-        </div>`
-    ).join('')
-    $itemsContainer.innerHTML = itemsHTML    
+function loadUsers() {
+    fetch("/users")
+        .then( response => response.json() )
+        .then( response => {
+        console.log(response)
+            createUserCards(response) 
+        })
+        .catch(err => console.error(err))
 }
 
-function login(event) {
+function createSongCards(_songs) {
+    songs = _songs
+    const songsHTML = _songs.map(song => 
+        `<div class="song">
+            <h4>${song.name}</h4>  
+            <h5>by: ${song.artist}</h5>
+            <button onClick="addToLikedSongs(${song.songID}, event)">Like</button>
+        </div>`
+    ).join('')
+    $songsContainer.innerHTML = songsHTML    
+}
+
+function addUser(event) {
     event.preventDefault()
     //create order object
     const $form = document.forms[0]
     const order = {
         user: {
-            first: $form.first.value,
-            last: $form.last.value,
+            username: $form.username.value,
             email: $form.email.value,
             password: $form.password.value
+        }
+    }
+    //POST on /login
+    const config = {
+        method: "POST",
+        body: JSON.stringify( order ),
+        headers: {
+            "Content-Type":"application/json"
+        }
+    }
+    fetch("/addUser",config)
+        .then( response => response.json() )
+        .then( response => console.log(response) )
+        .catch(err => console.error(err))
+
+}
+
+function addNewSong(event) {
+    event.preventDefault()
+    //create order object
+    const $form = document.forms[2]
+    const order = {
+        newSong: {
+            name: $form.name.value,
+            artistName: $form.artistName.value
+        }
+    }
+    //POST on /login
+    const config = {
+        method: "POST",
+        body: JSON.stringify( order ),
+        headers: {
+            "Content-Type":"application/json"
+        }
+    }
+    fetch("/addSong",config)
+        .then( response => response.json() )
+        .then( response => console.log(response) )
+        .catch(err => console.error(err))
+}
+
+function login(event) {
+     event.preventDefault()
+    //create order object
+    const $form = document.forms[1]
+    const order = {
+        user: {
+            username: $form.usernameLogin.value,
+            password: $form.passwordLogin.value
         }
     }
     //POST on /login
@@ -50,16 +111,16 @@ function login(event) {
         .then( response => response.json() )
         .then( response => console.log(response) )
         .catch(err => console.error(err))
-
 }
 
-function addToCart(id, event) {
-    const item = items.find(item => item.itemid == id)
 
-    const $newItem = document.createElement("li")
-    $newItem.innerHTML = 
-        `${item.name}`
-    $cart.append($newItem)
-    inCart.push(item)
-    document.querySelector("span#itemCount").innerHTML = inCart.length
+function addToLikedSongs(id, event) {
+    const song = songs.find(song => song.songID == id)
+
+    const $newSong = document.createElement("li")
+    $newSong.innerHTML = 
+        `${song.name}`
+    $likedSongs.append($newSong)
+    inLikedSongs.push(song)
+  //  document.querySelector("span#songCount").innerHTML = //inLikedSongs.length
 }

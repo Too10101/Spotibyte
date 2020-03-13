@@ -1,32 +1,68 @@
 <!doctype html>
 <html>
     <head>
-        <title>NV Spirit Store</title>
+        <title>SpotiByte</title>
         <link rel="stylesheet" href="style.css" type="text/css">
     </head>
     <body>
         <header>
-            <h1>NV Spirit Store</h1>
+            <h1>SpotiByte</h1>
+            <h2>Add Account</h2>
         </header>
         <section id="account">
             <form>
-                <label for="first">First Name: </label>
-                <input name="first" required>
-                <label for="last">Last Name: </label>
-                <input name="last" required>
+                <label for="username">Username: </label>
+                <input name="username" required>
+                
                 <label for="email">Email: </label>
                 <input name="email" required>
+                
                 <label for="password">Password: </label>
                 <input name="password" type="password" required>
+                
+                <input type="submit" onClick="addUser(event)">
+            </form>
+            
+            <h2>Login</h2>
+            <form>
+                <label for="usernameLogin">Username: </label>
+                <input name="usernameLogin" required>
+                
+                <label for="passwordLogin">Password: </label>
+                <input name="passwordLogin" required>
                 <input type="submit" onClick="login(event)">
             </form>
+            
+        <h2>|</h2>
+
+        <h3>Add New Song </h3>
+            
+         
+        <form>
+        <label for="name">Song Name: </label>
+        <input name="name" type="name" required>
+            
+        <label for="artistName">Artist Name: </label>
+        <input name="artistName" type="artistName" required>
+            
+        <input type="submit" onClick="addNewSong(event)">
+        </form>
+        
         </section>
-        <section id="cart">
-            <h3>Cart</h3>
+        <section id="likedSongs">
+            <h3>Liked Songs:</h3>
             <ul>
             </ul>
         </section>
-        <section id="items">
+        <h3>All Songs:</h3>
+        <section id="songs">
+            
+            <div class="song">
+                <h4>Song #1</h4>
+                <h5>by: Artist #1</h5>
+                <button onclick="addToLikedSongs(song.songid, event)">Add to Liked</button>
+            </div>
+            
         </section>
         <script src="script.js"></script>
     </body>
